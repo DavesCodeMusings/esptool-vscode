@@ -2,7 +2,7 @@
   "name": "esptool",
   "displayName": "ESP Tool",
   "description": "Make esptool.py functions available in the command palette",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.73.0"
   },
