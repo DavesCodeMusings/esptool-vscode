@@ -2,6 +2,7 @@
   "name": "esptool",
   "displayName": "ESP Tool",
   "description": "Command palette access to esptool for managing ESP microcontrollers",
+  "publisher": "DavesCodeMusings",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.73.0"
