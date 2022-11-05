@@ -2,6 +2,7 @@
   "name": "esptool",
   "displayName": "ESP Tool",
   "description": "Command palette access to esptool for managing ESP microcontrollers",
+  "icon": "images/fingerprint.png",
   "publisher": "DavesCodeMusings",
   "version": "1.0.0",
   "engines": {
