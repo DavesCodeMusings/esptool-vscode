@@ -1,6 +1,6 @@
 {
   "name": "esptool",
-  "displayName": "ESP Tool",
+  "displayName": "ESPTool",
   "description": "Command palette access to esptool for managing ESP microcontrollers",
   "icon": "images/fingerprint.png",
   "publisher": "DavesCodeMusings",
