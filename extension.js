@@ -1,4 +1,5 @@
 const vscode = require('vscode')
+const serialport = require('serialport')
 const childProcess = require('child_process')
 const path = require('path')
 
@@ -28,26 +29,63 @@ function activate(context) {
 	const term = vscode.window.createTerminal('esptool')
 	term.show(false)
 
+	/**
+	 *  Return COM port of attached device. Prompt user to choose when multiple devices are found.
+	 */
+  async function getDevicePort() {
+		let comPortList = await serialport.SerialPort.list()
+
+		return new Promise((resolve, reject) => {
+			if (comPortList == null || comPortList.length == 0) {
+				resolve('auto')  // detection failed but maybe esptool can still figure it out
+			}
+			else if (comPortList.length == 1) {
+				resolve(comPortList[0].path)
+			}
+			else {
+  			let portSelectionList = comPortList.map(port => {
+					return {
+            label: port.path,
+						detail: port.friendlyName
+					}
+			  })
+				console.debug('Attached devices:', comPortList)
+				let options = {
+					title: 'Device Selection',
+					canSelectMany: false,
+					matchOnDetail: true
+				}
+				vscode.window.showQuickPick(portSelectionList, options)
+				.then(choice => {
+  				resolve(choice.label)
+			  })
+			}	
+		})
+	}
+
 	// chip_id is useful for identifying boards
-	let chipIdCommand = vscode.commands.registerCommand('esptool.chip_id', () => {
-		term.sendText('py.exe -m esptool --chip auto chip_id')
+	let chipIdCommand = vscode.commands.registerCommand('esptool.chip_id', async () => {
+		let port = await getDevicePort()
+		term.sendText(`py.exe -m esptool --chip auto --port ${port} chip_id`)
 	})
 
 	context.subscriptions.push(chipIdCommand);
 
-	// chip_id is useful for identifying boards
-	let flashIdCommand = vscode.commands.registerCommand('esptool.flash_id', () => {
-		term.sendText('py.exe -m esptool --chip auto flash_id')
+	// flash_id is useful for determining flash memory size
+	let flashIdCommand = vscode.commands.registerCommand('esptool.flash_id', async () => {
+		let port = await getDevicePort()
+		term.sendText(`py.exe -m esptool --chip auto --port ${port} flash_id`)
 	})
 
 	context.subscriptions.push(flashIdCommand);
 
-	// erase_flash is somewhat redundant, because it's also included as a step prior to writing
-	let eraseFlashCommand = vscode.commands.registerCommand('esptool.erase_flash', () => {
-		vscode.window.showInformationMessage(`Erase flash memory?`, 'Erase', 'Cancel')
+	// erase_flash is somewhat redundant, because it's also included as a step prior to write_flash
+	let eraseFlashCommand = vscode.commands.registerCommand('esptool.erase_flash', async () => {
+		let port = await getDevicePort()
+		vscode.window.showInformationMessage(`Erase flash memory of ESP microcontroller on ${port}?`, 'Erase', 'Cancel')
 			.then(selection => {
 				if (selection === 'Erase') {
-					term.sendText('py.exe -m esptool --chip auto erase_flash')
+					term.sendText(`py.exe -m esptool --chip auto --port ${port} erase_flash`)
 				}
 			})
 	})
@@ -55,7 +93,8 @@ function activate(context) {
 	context.subscriptions.push(eraseFlashCommand);
 
 	// Let user select flash image with a dialog box
-	let writeFlashCommand = vscode.commands.registerCommand('esptool.write_flash', () => {
+	let writeFlashCommand = vscode.commands.registerCommand('esptool.write_flash', async () => {
+		let port = await getDevicePort()
 		const options = {
 			canSelectMany: false,
 			title: 'Select firmware image',
@@ -67,11 +106,11 @@ function activate(context) {
 		vscode.window.showOpenDialog(options)
 			.then(firmwareUri => {
 				if (firmwareUri && firmwareUri[0]) {
-					console.log('Selected file: ' + firmwareUri[0].fsPath)
-					vscode.window.showInformationMessage(`Erase flash and overwrite with new image: ${path.basename(firmwareUri[0].fsPath)}?`, 'Overwrite', 'Cancel')
+					console.debug('Selected file: ' + firmwareUri[0].fsPath)
+					vscode.window.showInformationMessage(`Overwrite ESP microcontroller on ${port} with new firmware image: ${path.basename(firmwareUri[0].fsPath)}?`, 'Overwrite', 'Cancel')
 						.then(selection => {
 							if (selection === 'Overwrite') {
-								term.sendText(`py.exe -m esptool --chip auto write_flash --erase-all --flash_size=detect 0 ${firmwareUri[0].fsPath}`)
+								term.sendText(`py.exe -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect 0 ${firmwareUri[0].fsPath}`)
 							}
 						})
 				}
