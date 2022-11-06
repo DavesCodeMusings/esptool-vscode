@@ -11,11 +11,6 @@ typing command-line options.
 
 You can also query the system on chip and flash ram characteristics.
 
-## Caveat
-All operations use auto-detect for the COM port, ESP chip model, and
-flash memory size. To avoid problems, you should have only one ESP
-device plugged in when using this extension.
-
 ## Requirements
 The host running this extension must have Python 3 installed as well
 as the esptool module.
@@ -25,5 +20,5 @@ You can get Python from: https://www.python.org/downloads/
 The esptool module can be installed with pip, like this:
 `py -m pip install esptool`
 
-## 1.0.0 Release Notes
-Initial release.
+## 1.1.0 Release Notes
+Added a device selection prompt for when multiple devices are attached.
