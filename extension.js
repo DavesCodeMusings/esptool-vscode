@@ -8,17 +8,25 @@ const path = require('path')
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+	// Assume this is a Windows system, but adjust if not.
+	let PYTHON_BIN = 'py.exe'
+	console.debug('Operating System:', process.platform)
+	if (process.platform != 'win32') {  // win32 is returned for 64-bit OS as well
+		PYTHON_BIN = 'python'
+	}
+	console.debug('Using Python executable:', PYTHON_BIN)
+	
 	// Python and the esptool module must be installed for this to work.
 	try {
-		let pythonVersion = childProcess.execSync('py --version').toString().split('\r\n')[0].split(' ')[1]
+		let pythonVersion = childProcess.execSync(`${PYTHON_BIN} --version`).toString().split('\r\n')[0].split(' ')[1]
 		console.debug('Python version:', pythonVersion)
 	}
 	catch (ex) {
-		vscode.window.showErrorMessage('Python is not installed or could not be run as py.exe', ex)
+		vscode.window.showErrorMessage(`Python is not installed or could not be run as ${PYTHON_BIN}`, ex)
 	}
 
 	try {
-		let esptoolVersion = childProcess.execSync('py -m esptool version').toString().split('\r\n')[1]
+		let esptoolVersion = childProcess.execSync(`${PYTHON_BIN} -m esptool version`).toString().split('\r\n')[1]
 		console.debug('esptool version:', esptoolVersion)
 	}
 	catch (ex) {
@@ -66,7 +74,7 @@ function activate(context) {
 	// chip_id is useful for identifying boards
 	let chipIdCommand = vscode.commands.registerCommand('esptool.chip_id', async () => {
 		let port = await getDevicePort()
-		term.sendText(`py.exe -m esptool --chip auto --port ${port} chip_id`)
+		term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} chip_id`)
 	})
 
 	context.subscriptions.push(chipIdCommand);
@@ -74,7 +82,7 @@ function activate(context) {
 	// flash_id is useful for determining flash memory size
 	let flashIdCommand = vscode.commands.registerCommand('esptool.flash_id', async () => {
 		let port = await getDevicePort()
-		term.sendText(`py.exe -m esptool --chip auto --port ${port} flash_id`)
+		term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} flash_id`)
 	})
 
 	context.subscriptions.push(flashIdCommand);
@@ -85,7 +93,7 @@ function activate(context) {
 		vscode.window.showInformationMessage(`Erase flash memory of ESP microcontroller on ${port}?`, 'Erase', 'Cancel')
 			.then(selection => {
 				if (selection === 'Erase') {
-					term.sendText(`py.exe -m esptool --chip auto --port ${port} erase_flash`)
+					term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} erase_flash`)
 				}
 			})
 	})
@@ -110,7 +118,7 @@ function activate(context) {
 					vscode.window.showInformationMessage(`Overwrite ESP microcontroller on ${port} with new firmware image: ${path.basename(firmwareUri[0].fsPath)}?`, 'Overwrite', 'Cancel')
 						.then(selection => {
 							if (selection === 'Overwrite') {
-								term.sendText(`py.exe -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect 0 ${firmwareUri[0].fsPath}`)
+								term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect 0 ${firmwareUri[0].fsPath}`)
 							}
 						})
 				}
