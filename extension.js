@@ -118,7 +118,7 @@ function activate(context) {
 					vscode.window.showInformationMessage(`Overwrite ESP microcontroller on ${port} with new firmware image: ${path.basename(firmwareUri[0].fsPath)}?`, 'Overwrite', 'Cancel')
 						.then(selection => {
 							if (selection === 'Overwrite') {
-								term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect 0 ${firmwareUri[0].fsPath}`)
+								term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect 0x1000 ${firmwareUri[0].fsPath}`)
 							}
 						})
 				}
