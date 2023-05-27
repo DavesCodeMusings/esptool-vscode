@@ -26,19 +26,19 @@
     "commands": [
       {
         "command": "esptool.chip_id",
-        "title": "ESPTool: Identify Chip (chip_id)"
+        "title": "ESPTool: Identify chip (chip_id)"
       },
       {
         "command": "esptool.flash_id",
-        "title": "ESPTool: Identify Flash (flash_id)"
+        "title": "ESPTool: Identify flash (flash_id)"
       },
       {
         "command": "esptool.erase_flash",
-        "title": "ESPTool: Erase Flash Memory (erase_flash)"
+        "title": "ESPTool: Erase flash memory (erase_flash)"
       },
       {
         "command": "esptool.write_flash",
-        "title": "ESPTool: Write Firmware File (write_flash)"
+        "title": "ESPTool: Write firmware file (write_flash)"
       }
     ]
   },
