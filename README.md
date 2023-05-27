@@ -33,6 +33,9 @@ You can read [more detail on GitHub](https://github.com/espressif/esptool/issues
 if you want, but the easiest workaround is to hold down the BOOT / FLASH
 button on the ESP32 board.
 
+## 1.1.2 Release Notes
+Fix 'invalid header' error after flashing.
+
 ## 1.1.1 Release Notes
 Fix to use py.exe only on Windows and python on all other OS.
 
