@@ -115,12 +115,31 @@ function activate(context) {
 			.then(firmwareUri => {
 				if (firmwareUri && firmwareUri[0]) {
 					console.debug('Selected file: ' + firmwareUri[0].fsPath)
-					vscode.window.showInformationMessage(`Overwrite ESP microcontroller on ${port} with new firmware image: ${path.basename(firmwareUri[0].fsPath)}?`, 'Overwrite', 'Cancel')
+					let options = {
+						title: 'Flash Address',
+						canSelectMany: false,
+						matchOnDetail: true
+					}
+					let addresses = [
+						{
+							label: "0x0",
+							detail: "Recommended for ESP8266, ESP32-C3, ESP32-S3"
+						},
+						{
+							label: "0x1000",
+							detail: "Recommended for ESP32, ESP32-S2"
+						}
+					]
+					vscode.window.showQuickPick(addresses, options)
+					.then(choice => {
+						vscode.window.showInformationMessage(`Overwrite ESP microcontroller on ${port} with new firmware image: ${path.basename(firmwareUri[0].fsPath)}?`, 'Overwrite', 'Cancel')
 						.then(selection => {
 							if (selection === 'Overwrite') {
-								term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect 0x1000 ${firmwareUri[0].fsPath}`)
+								let address = choice.label
+								term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect ${address} ${firmwareUri[0].fsPath}`)
 							}
 						})
+					})
 				}
 			})
 	})
