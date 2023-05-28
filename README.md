@@ -33,6 +33,9 @@ You can read [more detail on GitHub](https://github.com/espressif/esptool/issues
 if you want, but the easiest workaround is to hold down the BOOT / FLASH
 button on the ESP32 board.
 
+## 1.1.3 Release Notes
+Prompt for flash address to account for different boards.
+
 ## 1.1.2 Release Notes
 Fix 'invalid header' error after flashing.
 
