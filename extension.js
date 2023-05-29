@@ -59,7 +59,7 @@ function activate(context) {
 			  })
 				console.debug('Attached devices:', comPortList)
 				let options = {
-					title: 'Device Selection',
+					title: 'Select device',
 					canSelectMany: false,
 					matchOnDetail: true
 				}
@@ -116,17 +116,17 @@ function activate(context) {
 				if (firmwareUri && firmwareUri[0]) {
 					console.debug('Selected file: ' + firmwareUri[0].fsPath)
 					let options = {
-						title: 'Flash Address',
+						title: 'Select flash offset address',
 						canSelectMany: false,
 						matchOnDetail: true
 					}
 					let addresses = [
 						{
-							label: "0x0",
+							label: "Offset address = 0x0",
 							detail: "Recommended for ESP8266, ESP32-C3, ESP32-S3"
 						},
 						{
-							label: "0x1000",
+							label: "Offset address = 0x1000",
 							detail: "Recommended for ESP32, ESP32-S2"
 						}
 					]
