@@ -45,9 +45,11 @@ function activate(context) {
 
 		return new Promise((resolve, reject) => {
 			if (comPortList == null || comPortList.length == 0) {
-				resolve('auto')  // detection failed but maybe esptool can still figure it out
+				console.debug('No device found on any port.')
+				reject('No device detected.')
 			}
 			else if (comPortList.length == 1) {
+				console.debug('Using device on port:', comPortList[0].path)
 				resolve(comPortList[0].path)
 			}
 			else {
@@ -65,6 +67,7 @@ function activate(context) {
 				}
 				vscode.window.showQuickPick(portSelectionList, options)
 				.then(choice => {
+					console.debug('Using device on port:', choice.label)
   				resolve(choice.label)
 			  })
 			}	
@@ -73,45 +76,61 @@ function activate(context) {
 
 	// chip_id is useful for identifying boards
 	let chipIdCommand = vscode.commands.registerCommand('esptool.chip_id', async () => {
-		let port = await getDevicePort()
-		term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} chip_id`)
+		getDevicePort()
+		.then((port) => {
+		  term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} chip_id`)
+		})
+		.catch((err) => {
+			vscode.window.showErrorMessage(err)
+		})
 	})
 
 	context.subscriptions.push(chipIdCommand);
 
 	// flash_id is useful for determining flash memory size
 	let flashIdCommand = vscode.commands.registerCommand('esptool.flash_id', async () => {
-		let port = await getDevicePort()
-		term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} flash_id`)
+		getDevicePort()
+		.then((port) => {
+		  term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} flash_id`)
+		})
+		.catch((err) => {
+			vscode.window.showErrorMessage(err)
+		})
 	})
 
 	context.subscriptions.push(flashIdCommand);
 
 	// erase_flash is somewhat redundant, because it's also included as a step prior to write_flash
 	let eraseFlashCommand = vscode.commands.registerCommand('esptool.erase_flash', async () => {
-		let port = await getDevicePort()
-		vscode.window.showInformationMessage(`Erase flash memory of ESP microcontroller on ${port}?`, 'Erase', 'Cancel')
+		getDevicePort()
+		.then ((port) => {
+			vscode.window.showInformationMessage(`Erase flash memory of ESP microcontroller on ${port}?`, 'Erase', 'Cancel')
 			.then(selection => {
 				if (selection === 'Erase') {
 					term.sendText(`${PYTHON_BIN} -m esptool --chip auto --port ${port} erase_flash`)
 				}
 			})
+		})
+		.catch((err) => {
+			vscode.window.showErrorMessage(err)
+		})
 	})
 
 	context.subscriptions.push(eraseFlashCommand);
 
 	// Let user select flash image with a dialog box
 	let writeFlashCommand = vscode.commands.registerCommand('esptool.write_flash', async () => {
-		let port = await getDevicePort()
-		const options = {
-			canSelectMany: false,
-			title: 'Select firmware image',
-			filters: {
-				'Binary images': ['bin'],
-				'All files': ['*']
+		getDevicePort()
+		.then((port) => {
+			const options = {
+				canSelectMany: false,
+				title: 'Select firmware image',
+				filters: {
+					'Binary images': ['bin'],
+					'All files': ['*']
+				}
 			}
-		}
-		vscode.window.showOpenDialog(options)
+			vscode.window.showOpenDialog(options)
 			.then(firmwareUri => {
 				if (firmwareUri && firmwareUri[0]) {
 					console.debug('Selected file: ' + firmwareUri[0].fsPath)
@@ -142,6 +161,10 @@ function activate(context) {
 					})
 				}
 			})
+		})
+		.catch((err) => {
+			vscode.window.showErrorMessage(err)
+		})
 	})
 
 	context.subscriptions.push(writeFlashCommand);
