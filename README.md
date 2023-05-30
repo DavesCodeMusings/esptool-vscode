@@ -33,6 +33,9 @@ You can read [more detail on GitHub](https://github.com/espressif/esptool/issues
 if you want, but the easiest workaround is to hold down the BOOT / FLASH
 button on the ESP32 board.
 
+## 1.1.4 Release Notes
+Remove incompatible 'auto' fallback for port selection.
+
 ## 1.1.3 Release Notes
 Prompt for flash address to account for different boards.
 
