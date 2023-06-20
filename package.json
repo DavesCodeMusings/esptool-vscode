@@ -1,57 +1,57 @@
 {
   "name": "esptool",
   "displayName": "ESPTool",
-  "description": "Command palette access to esptool for managing ESP microcontrollers",
+  "description": "Visual Studio Code extension for esptool Python module",
   "icon": "images/fingerprint.png",
   "publisher": "DavesCodeMusings",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "engines": {
-    "vscode": "^1.73.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DavesCodeMusings/esptool-vscode.git"
+    "vscode": "^1.79.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:esptool.chip_id",
-    "onCommand:esptool.flash_id",
-    "onCommand:esptool.erase_flash",
-    "onCommand:esptool.write_flash"
-  ],
-  "main": "./extension.js",
+  "activationEvents": [],
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "esptool.chip_id",
-        "title": "ESPTool: Identify chip (chip_id)"
+        "category": "ESPTool",
+        "title": "Identify chip (chip_id)"
       },
       {
         "command": "esptool.flash_id",
-        "title": "ESPTool: Identify flash (flash_id)"
+        "category": "ESPTool",
+        "title": "Identify flash (flash_id)"
       },
       {
         "command": "esptool.erase_flash",
-        "title": "ESPTool: Erase flash memory (erase_flash)"
+        "category": "ESPTool",
+        "title": "Erase flash memory (erase_flash)"
       },
       {
         "command": "esptool.write_flash",
-        "title": "ESPTool: Write firmware file (write_flash)"
+        "category": "ESPTool",
+        "title": "Write firmware file (write_flash)"
       }
     ]
   },
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
-    "@types/vscode": "^1.73.0",
+    "@types/vscode": "^1.79.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
     "@vscode/test-electron": "^2.2.0",
     "eslint": "^8.26.0",
     "glob": "^8.0.3",
@@ -59,6 +59,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "serialport": "^10.4.0"
+    "serialport": "^11.0.0"
   }
 }
