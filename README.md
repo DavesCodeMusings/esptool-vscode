@@ -33,17 +33,22 @@ You can read [more detail on GitHub](https://github.com/espressif/esptool/issues
 if you want, but the easiest workaround is to hold down the BOOT / FLASH
 button on the ESP32 board.
 
-## 1.1.4 Release Notes
+## Release Notes
+
+### 1.1.5
+Converted code to TypeScript.
+
+### 1.1.4
 Remove incompatible 'auto' fallback for port selection.
 
-## 1.1.3 Release Notes
+### 1.1.3
 Prompt for flash address to account for different boards.
 
-## 1.1.2 Release Notes
+### 1.1.2
 Fix 'invalid header' error after flashing.
 
-## 1.1.1 Release Notes
+### 1.1.1
 Fix to use py.exe only on Windows and python on all other OS.
 
-## 1.1.0 Release Notes
+### 1.1.0
 Added a device selection prompt for when multiple devices are attached.
