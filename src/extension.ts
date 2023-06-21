@@ -3,7 +3,6 @@ import { basename } from 'path';
 import { ESPTool } from './esptool';
 import { getDevicePort } from './utility';
 
-
 export async function activate(context: vscode.ExtensionContext) {
 	let esptool = new ESPTool();
 
@@ -22,8 +21,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	}));
 
 	/*
-     *  Run 'esptool erase_flash' to clear the microcotroller's flash ram.
-     */
+	 *  Run 'esptool erase_flash' to clear the microcotroller's flash ram.
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('esptool.erase_flash', async (args) => {
 		let port: string = '';
 		if (args === undefined || args.label === undefined) {

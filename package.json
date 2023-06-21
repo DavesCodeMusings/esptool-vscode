@@ -39,7 +39,31 @@
         "category": "ESPTool",
         "title": "Write firmware file (write_flash)"
       }
-    ]
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "esptool.chip_id",
+          "group": "5_esptoolGroup@1",
+          "when": "view == serialPortView"
+        },
+        {
+          "command": "esptool.flash_id",
+          "group": "5_esptoolGroup@2",
+          "when": "view == serialPortView"
+        },
+        {
+          "command": "esptool.erase_flash",
+          "group": "5_esptoolGroup@3",
+          "when": "view == serialPortView"
+        },
+        {
+          "command": "esptool.write_flash",
+          "group": "5_esptoolGroup@4",
+          "when": "view == serialPortView"
+        }
+      ]
+    }  
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
