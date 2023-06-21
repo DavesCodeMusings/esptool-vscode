@@ -35,6 +35,9 @@ button on the ESP32 board.
 
 ## Release Notes
 
+### 1.1.6
+Add esptool commands to mpremote context menu when both extensions are installed.
+
 ### 1.1.5
 Converted code to TypeScript.
 

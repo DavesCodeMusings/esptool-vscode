@@ -4,7 +4,7 @@
   "description": "Visual Studio Code extension for esptool Python module",
   "icon": "images/fingerprint.png",
   "publisher": "DavesCodeMusings",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "engines": {
     "vscode": "^1.79.0"
   },
