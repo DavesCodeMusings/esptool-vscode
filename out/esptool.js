@@ -6,8 +6,18 @@ const child_process_1 = require("child_process");
 class ESPTool {
     constructor() {
         this.pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
-        this.terminal = vscode.window.createTerminal('esptool');
-        this.terminal.show(false); // false here lets the mpremote terminal take focus on startup
+        // Try to reuse mpremote terminal for a more integrated look and feel.
+        let mpremoteTerminal = vscode.window.terminals.find(obj => {
+            return obj.name === 'mpremote';
+        });
+        if (mpremoteTerminal) {
+            this.terminal = mpremoteTerminal;
+        }
+        else {
+            this.terminal = vscode.window.createTerminal('esptool');
+            this.terminal.show(false); // false here lets the mpremote terminal take focus on startup
+        }
+        console.debug('Using terminal:', this.terminal.name);
         console.debug('Operating System:', process.platform);
         if (process.platform !== 'win32') { // win32 is returned for 64-bit OS as well
             this.pythonBinary = 'python';
