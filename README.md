@@ -35,6 +35,9 @@ button on the ESP32 board.
 
 ## Release Notes
 
+### 1.1.7
+Share terminal with MPRemote extension when possible for more itegrated look and feel.
+
 ### 1.1.6
 Add esptool commands to mpremote context menu when both extensions are installed.
 
