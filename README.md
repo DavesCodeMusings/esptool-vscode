@@ -35,6 +35,10 @@ button on the ESP32 board.
 
 ## Release Notes
 
+### 1.1.8
+Provide configuration option to skip start-up checks for python binary
+and esptool module to help with Python virtual environments.
+
 ### 1.1.7
 Share terminal with MPRemote extension when possible for more integrated look and feel.
 
