@@ -35,6 +35,9 @@ button on the ESP32 board.
 
 ## Release Notes
 
+### 1.2.0
+Updated all dependent packages. No new functionality.
+
 ### 1.1.8
 Provide configuration option to skip start-up checks for python binary
 and esptool module to help with Python virtual environments.
