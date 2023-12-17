@@ -21,7 +21,7 @@ export class ESPTool {
 
         console.debug('Operating System:', process.platform);
         if (process.platform !== 'win32') {  // win32 is returned for 64-bit OS as well
-            this.pythonBinary = 'python';
+            this.pythonBinary = 'python3';
         }
         console.debug('Using Python executable:', this.pythonBinary);
 

@@ -36,7 +36,7 @@ button on the ESP32 board.
 ## Release Notes
 
 ### 1.2.0
-Updated all dependent packages. No new functionality.
+Use python3 instead of python on non-Windows systems. Updated all dependent packages.
 
 ### 1.1.8
 Provide configuration option to skip start-up checks for python binary
