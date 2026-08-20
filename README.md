@@ -35,6 +35,10 @@ button on the ESP32 board.
 
 ## Release Notes
 
+### 1.3.0
+Add a configuration checkbox for using --no-stub with all esptool commands. This allows
+working around errors on systems with missing stub files.
+
 ### 1.2.0
 Use python3 instead of python on non-Windows systems. Updated all dependent packages.
 
