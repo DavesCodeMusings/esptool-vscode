@@ -6,6 +6,7 @@ const child_process_1 = require("child_process");
 class ESPTool {
     constructor() {
         this.pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
+        this.moduleInvocation = 'esptool'; // What to use after Python's -m option to invoke the esptool module.
         // Try to reuse mpremote terminal for a more integrated look and feel.
         let mpremoteTerminal = vscode.window.terminals.find(obj => {
             return obj.name === 'mpremote';
@@ -40,26 +41,29 @@ class ESPTool {
                 vscode.window.showErrorMessage('esptool is not installed or could not be run as a Python module');
             }
         }
+        if (vscode.workspace.getConfiguration('esptool').useNoStub === true) {
+            this.moduleInvocation += " --no-stub";
+        }
     }
     chipId(port) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m esptool --chip auto --port ${port} chip_id`);
+            this.terminal.sendText(`${this.pythonBinary} -m ${this.moduleInvocation} --chip auto --port ${port} chip_id`);
         }
     }
     eraseFlash(port) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m esptool --chip auto --port ${port} erase_flash`);
+            this.terminal.sendText(`${this.pythonBinary} -m ${this.moduleInvocation} --chip auto --port ${port} erase_flash`);
         }
     }
     flashId(port) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m esptool --chip auto --port ${port} flash_id`);
+            this.terminal.sendText(`${this.pythonBinary} -m ${this.moduleInvocation} --chip auto --port ${port} flash_id`);
         }
     }
     writeFlash(port, address, image) {
         if (port) {
             console.debug('write_flash', address, image);
-            this.terminal.sendText(`${this.pythonBinary} -m esptool --chip auto --port ${port} write_flash --erase-all --flash_size=detect ${address} ${image}`);
+            this.terminal.sendText(`${this.pythonBinary} -m ${this.moduleInvocation} --chip auto --port ${port} write_flash --erase-all --flash_size=detect ${address} ${image}`);
         }
     }
 }

@@ -47,6 +47,11 @@
           "type": "boolean",
           "default": false,
           "description": "Skip checks for python binary and mpremote module at start-up. Select this if you use a Python virtual environment to avoid errors."
+        },
+        "esptool.useNoStub": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use esptool's --no-stub option for all commands. Select if you have a system with missing or buggy stub files."
         }
       }
     },
